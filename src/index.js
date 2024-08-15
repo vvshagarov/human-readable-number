@@ -1,20 +1,23 @@
 module.exports = function toReadable (number) {
-  if (number === 0) {
-    return 'zero';
+module.exports = function toReadable(number) {
+  const ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+  const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+  const hundreds = ['', 'one hundred', 'two hundred', 'three hundred', 'four hundred', 'five hundred', 'six hundred', 'seven hundred', 'eight hundred', 'nine hundred'];
+
+  if (number < 10) {
+    return ones[number];
+  } else if (number < 20) {
+    return teens[number - 10];
+  } else if (number < 100) {
+    const tensIndex = Math.floor(number / 10);
+    const onesIndex = number % 10;
+    return tens[tensIndex] + (onesIndex === 0 ? '' : ' ' + ones[onesIndex]);
+  } else if (number < 1000) {
+    const hundredsIndex = Math.floor(number / 100);
+    const remainder = number % 100;
+    return hundreds[hundredsIndex] + (remainder === 0 ? '' : ' ' + toReadable(remainder));
+  } else {
+    return 'number out of range';
   }
-
-  const belowTwenty = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-  const belowHundred = ['', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-
-  function helper(num) {
-    if (num < 20) {
-      return belowTwenty[num];
-    } else if (num < 100) {
-      return belowHundred[Math.floor(num / 10)] + (num % 10 !== 0 ? '-' + belowTwenty[num % 10] : '');
-    } else {
-      return belowTwenty[Math.floor(num / 100)] + ' hundred' + (num % 100 !== 0 ? ' ' + helper(num % 100) : '');
-    }
-  }
-
-  return helper(number);
 }
